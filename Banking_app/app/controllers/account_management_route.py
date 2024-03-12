@@ -5,6 +5,7 @@ from app.models.user import User
 from app.connectors.mysql_connector import engine
 from sqlalchemy.orm import sessionmaker
 
+# Create the account routes blueprint
 account_routes = Blueprint('account_routes', __name__)
 
 # Helper function to get the user's accounts
@@ -61,25 +62,40 @@ def create_account():
 @account_routes.route('/account', methods=['GET'])
 @jwt_required()
 def get_accounts():
+    
+    # Connect to the database
     connection = engine.connect()
     Session = sessionmaker(connection)
     session = Session()
     user_id = get_jwt_identity()
+    
+    # Get the user's accounts
     user = session.query(User).filter_by(id=user_id).first()
     accounts = user.accounts
     
+    #
     return jsonify([account.to_dict() for account in accounts])
 
 # Get account by id
 @account_routes.route('/account/<int:account_id>', methods=['GET'])
 @jwt_required()
 def get_account(account_id):
+    
+    # Get the user id from the JWT
     user_id = get_jwt_identity()
+    
+    # Check if the user owns the account
     if check_account_ownership(account_id, user_id):
+        
+        # Connect to the database
         connection = engine.connect()
         Session = sessionmaker(connection)
         session = Session()
+        
+        # Get the account by id
         account = session.query(Account).filter_by(id=account_id).first()
+        
+        # Return the account as a dictionary
         return jsonify(account.to_dict())
     else:
         return {'error': 'Unauthorized'}, 401
@@ -88,16 +104,26 @@ def get_account(account_id):
 @account_routes.route('/account/<int:account_id>', methods=['PUT'])
 @jwt_required()
 def update_account(account_id):
+    
+    # Get the user id from the JWT
     user_id = get_jwt_identity()
+    
+    # Check if the user owns the account
     if check_account_ownership(account_id, user_id):
+        
+        # Connect to the database
         connection = engine.connect()
         Session = sessionmaker(connection)
         session = Session()
         session.begin()
+        
+        # Get the data from the request
         data = request.json
         account_type = data.get('account_type')
         account_number = data.get('account_number')
         balance = data.get('balance')
+        
+        # Get the account by id
         account = session.query(Account).filter_by(id=account_id).first()
         
         try:
@@ -119,6 +145,8 @@ def update_account(account_id):
 @account_routes.route('/account/<int:account_id>', methods=['DELETE'])
 @jwt_required()
 def delete_account(account_id):
+    
+    # Get the user id from the JWT
     user_id = get_jwt_identity()
     
     # Check if the user owns the account
@@ -127,6 +155,8 @@ def delete_account(account_id):
         Session = sessionmaker(connection)
         session = Session()
         session.begin()
+        
+        # Get the account by id
         account = session.query(Account).filter_by(id=account_id).first()
         
         try:

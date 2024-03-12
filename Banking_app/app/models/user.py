@@ -6,6 +6,8 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
 class User(Base):
+    
+    # Define the table name
     __tablename__ = 'users'
     id = mapped_column(Integer, primary_key=True, autoincrement=True)
     username = mapped_column(String(255), unique=True)

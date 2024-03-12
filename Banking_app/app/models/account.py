@@ -4,6 +4,8 @@ from sqlalchemy.sql import func
 from app.models.base import Base
 
 class Account(Base):
+    
+    # Define the table name
     __tablename__ = 'accounts'
     id = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id = mapped_column(Integer, ForeignKey('users.id'))

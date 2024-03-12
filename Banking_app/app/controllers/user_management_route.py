@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from flask_jwt_extended import create_access_token, jwt_required
 import bcrypt
 
+# Create the user routes blueprint
 user_routes = Blueprint('user_routes', __name__)
 
 # Add the register route
@@ -67,6 +68,7 @@ def login():
         user = session.query(User).filter_by(email=email).first()
         
         try:
+            # Check if the user exists and the password is correct
             if user:
                 if bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
                     access_token = create_access_token(identity=user.id)
@@ -78,7 +80,8 @@ def login():
         
         except Exception as e:
             return {'error': f'An error occurred: {e}'}, 500
-        
+
+# Add the get users route        
 @user_routes.route('/users', methods=['GET'])
 def get_users():
     
@@ -99,7 +102,8 @@ def get_users():
     except Exception as e:
         # If there is an error getting the users
         return {'error': f'An error occurred: {e}'}, 500
-            
+
+# Add the get user by id route
 @user_routes.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user_by_id(user_id):

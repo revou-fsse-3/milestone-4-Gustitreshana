@@ -14,6 +14,7 @@ try:
     engine = create_engine(f'mysql+mysqlconnector://{username}:{password}@{host}/{database}')
     connection = engine.connect()
     Session = sessionmaker(connection)
+    
     # If the connection is successful
     print(f'Connected to the database at {host}...')
 
