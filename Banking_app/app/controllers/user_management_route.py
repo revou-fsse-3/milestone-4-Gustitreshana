@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from app.models.user import User
 from app.connectors.mysql_connector import engine
 from sqlalchemy.orm import sessionmaker
+from flask_jwt_extended import create_access_token, jwt_required
 import bcrypt
 
 user_routes = Blueprint('user_routes', __name__)
@@ -67,19 +68,15 @@ def login():
         
         try:
             if user:
-                # If the user exists
                 if bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
-                    # If the password is correct
-                    return {'message': 'Logged in successfully'}, 200
+                    access_token = create_access_token(identity=user.id)
+                    return {'access_token': access_token}, 200
                 else:
-                    # If the password is incorrect
                     return {'message': 'Invalid password'}, 401
             else:
-                # If the user does not exist
                 return {'message': 'User not found'}, 404
-            
+        
         except Exception as e:
-            # If there is an error logging in
             return {'error': f'An error occurred: {e}'}, 500
         
 @user_routes.route('/users', methods=['GET'])
@@ -127,6 +124,7 @@ def get_user_by_id(user_id):
         return {'error': f'An error occurred: {e}'}, 500
     
 @user_routes.route('/users/<int:user_id>', methods=['PUT'])
+@jwt_required()
 def update_user(user_id):
         
         # Connect to the database
@@ -160,6 +158,7 @@ def update_user(user_id):
             return {'error': f'An error occurred: {e}'}, 500
         
 @user_routes.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
 def delete_user(user_id):
         
         # Connect to the database
