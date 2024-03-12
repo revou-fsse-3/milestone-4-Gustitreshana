@@ -1,8 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app.models.user import User
 from app.connectors.mysql_connector import engine
 from sqlalchemy.orm import sessionmaker
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, unset_jwt_cookies
 import bcrypt
 
 # Create the user routes blueprint
@@ -189,5 +189,12 @@ def delete_user(user_id):
             # If there is an error deleting the user
             session.rollback()
             return {'error': f'An error occurred: {e}'}, 500
+        
+# Logout route
+@user_routes.route('/logout', methods=['POST'])
+def logout():
+    response = jsonify({"message": "Logout successful"})
+    unset_jwt_cookies(response)
+    return response
         
         
