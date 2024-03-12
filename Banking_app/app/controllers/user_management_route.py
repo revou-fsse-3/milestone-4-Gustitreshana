@@ -101,6 +101,7 @@ def get_users():
         return {'error': f'An error occurred: {e}'}, 500
             
 @user_routes.route('/users/<int:user_id>', methods=['GET'])
+@jwt_required()
 def get_user_by_id(user_id):
     
     # Connect to the database
