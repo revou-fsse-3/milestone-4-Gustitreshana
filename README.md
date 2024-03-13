@@ -7,9 +7,11 @@ A simple online banking system built with Python, Flask, and MySQL.
 * **User Management:**
 * Secure user registration and login with password hashing.
 * Ability to view and update user profiles.
+
 * **Account Management:**
 * Create multiple bank accounts per user (savings, checking, etc.).
 * View account balances and details.
+
 * **Transactions:**
 * Transfer funds between a user's accounts.
 * Withdraw funds from accounts with balance checks.
@@ -22,6 +24,7 @@ A simple online banking system built with Python, Flask, and MySQL.
 * Python
 * Flask (RESTful API development)
 * SQLAlchemy (Database ORM)
+
 * **Database:**
 * MySQL
 
