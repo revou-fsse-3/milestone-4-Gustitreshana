@@ -46,11 +46,11 @@ A simple online banking system built with Python, Flask, and MySQL.
 1. Create a MySQL database named `banking_system`.
 2. Update database credentials in `Banking_app/.env`:
 
-DATABASE_HOSTNAME=your_database_hostname
-DATABASE_PORT=3306
-DATABASE_USERNAME=your_database_username
-DATABASE_PASSWORD=your_database_password
-DATABASE_NAME=banking_system
+* DATABASE_HOSTNAME=your_database_hostname
+* DATABASE_PORT=3306
+* DATABASE_USERNAME=your_database_username
+* DATABASE_PASSWORD=your_database_password
+* DATABASE_NAME=banking_system
 
 ### Running the Application
 
